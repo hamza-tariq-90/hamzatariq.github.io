@@ -1,19 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Redirecting to LinkedIn</title>
-    <script>
-      // Try to open the LinkedIn app first
-      window.location = "linkedin://in/tariqhamza";
-      // Fallback to web profile after 2 seconds
-      setTimeout(() => {
-        window.location.href = "https://www.linkedin.com/in/tariqhamza";
-      }, 2000);
-    </script>
-  </head>
-  <body>
-    <p>Redirecting to my LinkedIn profile...</p>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Redirecting…</title>
+  <noscript><meta http-equiv="refresh" content="0;url=https://www.linkedin.com/in/tariqhamza"></noscript>
+  <script>
+    (function () {
+      var webUrl = "https://www.linkedin.com/in/tariqhamza";
+      var ua = navigator.userAgent || "";
+      var isAndroid = /Android/i.test(ua);
+      var isIOS = /iPhone|iPad|iPod/i.test(ua);
+
+      if (isAndroid) {
+        // Android intent with built-in web fallback
+        window.location.href =
+          "intent://in/tariqhamza#Intent;scheme=linkedin;package=com.linkedin.android;S.browser_fallback_url=" +
+          encodeURIComponent(webUrl) +
+          ";end";
+      } else if (isIOS) {
+        // iOS deep link then quick fallback
+        var t = Date.now();
+        window.location.href = "linkedin://in/tariqhamza";
+        setTimeout(function () {
+          if (Date.now() - t < 1500) window.location.href = webUrl;
+        }, 1200);
+      } else {
+        // Desktop or other
+        window.location.href = webUrl;
+      }
+    })();
+  </script>
+</head>
+<body>
+  <p>Opening LinkedIn… <a href="https://www.linkedin.com/in/tariqhamza">click here if not redirected</a>.</p>
+</body>
 </html>
